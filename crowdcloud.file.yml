@@ -1,0 +1,37 @@
+project:
+  name: "http_sample_project"
+  description: "Sample project to test serverless runtime config"
+  version: "0.1.0"
+  owner: "your-team-name"
+
+run:
+  runtime: "python"
+  file: "main.py"
+  args:
+    --sample: args
+  timeout: 10s
+  cpu: 2
+  memory: 256M
+
+input:
+  type: file
+  path: ./input.json
+  content-validator: json # | raw | kv
+
+output:
+  where: file
+  path: ./output.json
+  parser: json # or kv or raw
+
+error:
+  where: file
+  path: ./error.json
+  parser: raw
+
+errors:
+  map:
+    "0": 200 # Success
+    "1": 400 # Invalid args
+    "2": 500 # Internal server error
+  default: 500 # fallback if unmapped
+
